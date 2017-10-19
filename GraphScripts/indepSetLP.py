@@ -1,12 +1,13 @@
 import numpy as np
 from scipy.optimize import linprog
-from graphProduct import graphProductPower
+#from graphProduct import graphProductPower
 
+lpIsMinimizer=True
 #function to generate the LP which would calculate the fractional independent set of
 #a graph. The input to the function is an adjacency Matrix (2d array), and a boolean
 #which is true if the linear program solver you are using is a minimizer, and false
 #otherwise
-def indepSetLP(adjacencyMatrix, lpIsMinimizer):
+def indepSetLP(adjacencyMatrix):
 	#gets the size of the graph
 	n = len(adjacencyMatrix)
 	#figures out how many edges are in the graph, we only need to do each edge once
@@ -43,23 +44,14 @@ def indepSetLP(adjacencyMatrix, lpIsMinimizer):
 	else:
 		objFunction = np.ones(n)
 		
-	bounds=(0,1)
-	return objFunction, matrixA, constraintUpperBounds, bounds
+	variableBounds=(0,1)
+	res = linprog(objFunction, A_ub=matrixA, b_ub= constraintUpperBounds, bounds=variableBounds)
+
+	#print(res)
+	return -res["fun"]
 
 
-testMatrix=[[1, 1, 0, 0, 1],[1, 1, 1, 0, 0],[0, 1, 1, 1, 0], [0, 0, 1, 1, 1], [1, 0, 0, 1, 1]]
+#testMatrix=[[1, 1, 0, 0, 1],[1, 1, 1, 0, 0],[0, 1, 1, 1, 0], [0, 0, 1, 1, 1], [1, 0, 0, 1, 1]]
 
-graphProdMatrix = graphProductPower(testMatrix,2)
-#print(len(graphProdMatrix[1]))
-#for i in graphProdMatrix:
-	#print(i)
-#testMatrix=[[1,1,0],[1,1,1],[0,1,1]]
-objFunction, matrixA, constraintUpperBounds, variableBounds=indepSetLP(graphProdMatrix, True)
-#print(objFunction)
-#print(matrixA)
-#print(constraintUpperBounds)
-#print(variableBounds)
-
-res = linprog(objFunction, A_ub=matrixA, b_ub= constraintUpperBounds, bounds=variableBounds)
-
-print(res)
+#graphProdMatrix = graphProductPower(testMatrix,2)
+#indepSetLP(graphProdMatrix);
