@@ -1,5 +1,5 @@
 from copy import deepcopy
-from graphProduct import graphProductPower
+#from graphProduct import graphProductPower
 def removeVertexEdges(graph, vertex):
 	for i in range(len(graph[vertex])):
 		if i!=vertex:
@@ -30,6 +30,7 @@ def vertexCoverApprox(graph):
 						edgesLeft=True
 				j+=1
 			i+=1
+	#print(vertexCover)
 	return vertexCover
 			
 def indepSetApprox(graph):
@@ -40,7 +41,7 @@ def indepSetApprox(graph):
 		if i not in vertexCover:
 			indepSet.append(i)
 	return indepSet
-matrix=[[1,1,0,0,1], [1,1,1,0,0], [0,1,1,1,0],[0,0,1,1,1],[1,0,0,1,1]]
+""""matrix=[[1,1,0,0,1], [1,1,1,0,0], [0,1,1,1,0],[0,0,1,1,1],[1,0,0,1,1]]
 
 test= graphProductPower(matrix,2)
 for i in test:
@@ -51,4 +52,4 @@ indepSet= indepSetApprox(test)
 for i in test:
 	print(i)
 
-print(indepSet)
+print(indepSet)"""

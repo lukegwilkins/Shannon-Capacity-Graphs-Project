@@ -1,77 +1,76 @@
 from copy import copy
 import numpy as np
 from scipy.optimize import linprog
-""""def incrementClique(graph,clique):
-	vertex=clique[0]
-	cliques = []
-	#cliques.append(clique)
-	for i in range(len(graph[vertex])):
-		if i not in clique:
-			newVertex=True
-			j=0
-			while j<len(clique) and newVertex:
-				if graph[i][clique[j]]==0:
-					newVertex=False
-				j+=1
-			if newVertex:
-				newClique=copy(clique)
-				newClique.append(i)
-				cliques.append(newClique)
-	return cliques
-
-
-def combination(vertices, amount):
-	cliqueMatrix=[]
-	tempVertices=copy(vertices)
-	for i in vertices:
-		for j in range(amount):
-"""
+from itertools import combinations as iterCombos
+from GraphScripts.maximumClique import cliqueMaxApprox
 			
-def checkClique(graph, clique):
+def checkClique(edges, clique):
 	validClique=True
 	
 	i=0
 	while(i<len(clique) and validClique):
 		j=i+1
 		while(j<len(clique) and validClique):
-			if(graph[clique[i]][clique[j]]==0):
+			if(edges[clique[i]][clique[j]]==0):
 				validClique=False
 			j+=1
 		i+=1
 	return validClique
 			
-def combinations(vertices, amount):
+def generateFixedSizeCliques(vertices,edges, size):
+	cliques=[]
+	amount = 6000
+	for i in iterCombos(vertices,size):
+		if checkClique(edges, i):
+			cliques.append(list(i))
+			if len(cliques)>amount:
+				break
+	return cliques
+
+def generateCliques(vertices, edges, amount):	
+	cliques=[]
+	for i in range(3,amount+1):
+		cliques= cliques+generateFixedSizeCliques(vertices,edges,i)
+	return addEdges(edges, vertices, cliques)
+
+def listIsSubList(listA, listB):
+	for i in listA:
+		if i not in listB:
+			return False
+	return True
+	
+def isSubListOfElement(listA, listOfLists):
+	for i in listOfLists:
+		if listIsSubList(listA,i):
+			return True
+	return False
+	
+def cliqueQualityGen(graph, vertices, startingClique):
 	n=len(vertices)
+	#count=3
+	amount=len(startingClique)-1
 	temp=copy(vertices)
-	p=[]
-	for i in range(1,2**n):
-		x=bin(i)[2:].zfill(n)
-		if(x.count('1')<=amount):
-			m=[]
-			for j in range(n):
-				if x[j]=='1':
-					m.append(temp[j])
-			p.append(m)
-	return p
-
-def generateCliques(graph,amount):
-	vertices=[]
-	for i in range(len(graph)):
-		vertices.append(i)
+	cliques=[startingClique]
+	for i in range(amount, 2,-1):
+		for j in iterCombos(vertices,i):
+			if checkClique(graph,list(j)):
+				if not(isSubListOfElement(j,cliques)):
+					cliques.append(list(j))
+					break
 	
-	combos=combinations(vertices, amount)
-	i=0
-	while i<len(combos):
-		if checkClique(graph, combos[i]):
-			i+=1
-		else:
-			del combos[i]
-	return combos
+	return addEdges(graph, vertices, cliques)
 
-def createLP(cliques,vertices):
-	noOfRows=len(cliques)-len(vertices)
+def addEdges(graph, vertices, cliques):
+	for i in vertices:
+		#cliques.append([i])
+		for j in vertices:
+			if(graph[i][j]==1 and i<j and i!=j):
+				cliques.append([i,j])
+	return cliques
+	
+def createAndRunLP(cliques,vertices):
+	noOfRows=len(cliques)#-len(vertices)
 	matrixA = np.zeros((noOfRows,len(vertices)))
-	
 	matrixLine=0
 	for i in range(len(cliques)):
 		if(len(cliques[i])>1):
@@ -83,18 +82,29 @@ def createLP(cliques,vertices):
 	objFunction=-1*np.ones(len(vertices))
 	
 	res = linprog(objFunction, A_ub=matrixA, b_ub= constraintUpperBounds)
-	print(res)
+	#print(res["fun"])
 	return -res["fun"]
 	
-	
-matrix=[[1,1,0,0,1],[1,1,1,0,0],[0,1,1,1,0], [0,0,1,1,1],[1,0,0,1,1]]
+def qualityCliquesLP(vertices, edges, b):
+	#print("quality")
+	maxClique=cliqueMaxApprox(vertices, edges,b)
+	print(maxClique)
+	cliques=cliqueQualityGen(edges, vertices, maxClique)
+	#print(cliques)
+	result=createAndRunLP(cliques, vertices)
+	return result
 
-""""combo=combinations([0,1,2,3,4],3)
-print(combo)
-print(len(combo))
-
-print(checkClique(matrix, [0,1]))"""
-
-cliques=generateCliques(matrix,2)
-print(cliques)
-print(createLP(cliques, [0,1,2,3,4]))
+def quantityCliquesLP(vertices, edges, amount):
+	#print("quantity")
+	cliques=generateCliques(vertices, edges, amount)
+	#print(cliques)
+	result=createAndRunLP(cliques, vertices)
+	return result
+#matrix=[[1,1,0,0,1],[1,1,1,0,0],[0,1,1,1,0], [0,0,1,1,1],[1,0,0,1,1]]
+""""matrix=np.ones((25,25))
+#matrix = np.ones((5,5))
+vertices=[0,1,2,3,4,5,6,7,8,9, 10, 11,12,13,14,15,16,17,18,19,20,21,22,23,24]
+quantityCliquesLP(vertices, matrix, 4)
+#cliques=cliqueQualityGen(matrix,[0,1,2,3,4,5,6,7,8,9, 10, 11,12,13,14,15,16,17,18,19,20,21,22,23,24],14)
+print(qualityCliquesLP([0,1,2,3,4,5,6,7,8,9, 10, 11,12,13,14,15,16,17,18,19,20,21,22,23,24],matrix, 0.01))
+#print(createLP(cliques, [0,1,2,3,4]))"""
