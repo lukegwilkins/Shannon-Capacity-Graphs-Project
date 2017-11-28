@@ -58,6 +58,6 @@ print(len(indep))"""
 #pGraph=simpleStrongProd(graph,4)
 #print(pGraph.nodes())
 #print(len(pGraph))
-cyclePowerTesters(7,3,3)
+cyclePowerTesters(7,2,2)
 #print(len(prodGraph.nodes()))
 #print(prodGraph.edges())

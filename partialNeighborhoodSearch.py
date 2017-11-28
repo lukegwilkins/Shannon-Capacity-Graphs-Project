@@ -1,5 +1,6 @@
 import random
 import networkx as nx
+from networkx.algorithms import approximation
 from datetime import datetime
 random.seed(datetime.now())
 
@@ -27,27 +28,77 @@ def graphStrongProdPower(graph,k):
 	return resultingGraph
 
 def nodeConversion(node):
-	left=node[0]
-	right=node[1]
-	node=[node[1]]
-	while type(left) is tuple:
-		node=[left[1]]+node
-		left=left[0]
-	node=[left]+node
-	return node
+	if type(node) is int:
+		return [node]
+	else:
+		#print(node)
+		left = node[0]
+		right = node[1]
+		node=nodeConversion(left)+nodeConversion(right)
+		return node
+
+def leeDistance(vOne,vTwo,p):
+	distance=0
+	vOneConv=nodeConversion(vOne)
+	vTwoConv=nodeConversion(vTwo)
 	
-def search(graph, b):
-	indepSet=greedyIndepSet(graph)
-	indepSetLoop=indepSet
-	while True:
+	for i in range(len(vOne)):
+		difference = abs(vOneConv[i]-vTwoConv[i])
+		if(difference<(p-difference)):
+			distance+=difference
+		else:
+			distance +=p-difference
+	return distance
+
+def distanceVertices(indepSet, vertex, b, p):
+	returnList=[]
+	for i in indepSet:
+		if(leeDistance(i,vertex, p)>b):
+			returnList.append(i)
+	return returnList
+
+
+def graphWithNeighborsRemoved(graph, vertices):
+	returnGraph = graph.copy()
+	for i in vertices:
+		neighbors =[]
+		for j in returnGraph.neighbors(i):
+			neighbors.append(j)
+		#print(neighbors)
+		for j in neighbors:
+			returnGraph.remove_node(j)
+		
+		returnGraph.remove_node(i)
+	return returnGraph
+
+def unionList(listA, listB):
+	for i in listB:
+		if i not in listA:
+			listA.append(i)
+	return listA
+	
+def search(graph, b, p):
+	indepSet=greedyAlg(graph.copy())
+	indepSetBest=indepSet
+	condition=True
+	count=0
+	while condition:
 		i = indepSet[random.randint(0,len(indepSet)-1)]
-		indepSetLoop=distanceVertices(indepSet, i, b)
+		indepSetLoop=distanceVertices(indepSet, i, b, p)
 		subGraph=graphWithNeighborsRemoved(graph,indepSetLoop)
-		#subgraph remove i
-		maxInd=maxIndSet(subGraph, graph)
+		subGraph.remove_node(i)
+		maxInd=approximation.maximum_independent_set(subGraph)
+		#print(maxInd)
+		#print(indepSetLoop)
 		indepSet= unionList(indepSetLoop,maxInd)
-		if(len(indepSet)>len(indepSetLoop)):
-			indepSetLoop=indepSet
+		#print(indepSet)
+		if(len(indepSet)>len(indepSetBest)):
+			indepSetBest=indepSet
+		count+=1
+		print(count)
+		if(count>100):
+			condition=False
+	return indepSetBest
 
 def minimumDegreeNode(graph):
 	nodes=graph.nodes()
@@ -74,13 +125,30 @@ def greedyAlg(graph):
 		for i in neighbors:
 			graph.remove_node(i)
 		graph.remove_node(minimumNode)
+		#print(len(graph.nodes()))
 	return indepSet
 
-k=2
-indepSet=greedyAlg(graphStrongProdPower(cycleGenerator(7),k))
+k=3
+graph=graphStrongProdPower(cycleGenerator(7),k)
+indepSet=greedyAlg(graph.copy())
 print(indepSet)
 print(len(indepSet))
 print(len(indepSet)**(1/k))
 
-print()
-print(nodeConversion(((1,2),3)))
+#print(graph.nodes())
+tuple=(5,((1,2),(3,4)))
+print(nodeConversion(tuple))
+""""
+print(leeDistance(((1,2),1), ((2,4),6),7))
+vertices=distanceVertices(indepSet, (1,2),3,7)
+vertices
+print(vertices)
+print(graph.nodes())
+reducedGraph=graphWithNeighborsRemoved(graph, vertices)
+reducedGraph.remove_node((1,2))
+print(reducedGraph.nodes())
+
+print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
+indep=search(graph,4, 7)
+print(indep)
+print(len(indep))
