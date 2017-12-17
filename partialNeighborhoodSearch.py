@@ -82,6 +82,7 @@ def search(graph, b, p):
 	indepSetBest=indepSet
 	condition=True
 	count=0
+	print("boop")
 	while condition:
 		i = indepSet[random.randint(0,len(indepSet)-1)]
 		indepSetLoop=distanceVertices(indepSet, i, b, p)
@@ -96,8 +97,11 @@ def search(graph, b, p):
 			indepSetBest=indepSet
 		count+=1
 		print(count)
-		if(count>100):
+		if(count>10):
 			condition=False
+	filename="results/c"+str(p)+"b"+str(b)+"k5Iter10.txt"
+	file=open(filename,'w')
+	file.write(str(indepSetBest))
 	return indepSetBest
 
 def minimumDegreeNode(graph):
@@ -128,12 +132,12 @@ def greedyAlg(graph):
 		#print(len(graph.nodes()))
 	return indepSet
 
-k=3
+k=5
 graph=graphStrongProdPower(cycleGenerator(7),k)
-indepSet=greedyAlg(graph.copy())
-print(indepSet)
-print(len(indepSet))
-print(len(indepSet)**(1/k))
+#indepSet=greedyAlg(graph.copy())
+#print(indepSet)
+#print(len(indepSet))
+#print(len(indepSet)**(1/k))
 
 #print(graph.nodes())
 tuple=(5,((1,2),(3,4)))
@@ -149,6 +153,6 @@ reducedGraph.remove_node((1,2))
 print(reducedGraph.nodes())
 
 print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
-indep=search(graph,4, 7)
+indep=search(graph,2, 7)
 print(indep)
 print(len(indep))
