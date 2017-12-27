@@ -77,7 +77,7 @@ def unionList(listA, listB):
 			listA.append(i)
 	return listA
 	
-def search(graph, b, p):
+def search(graph, b, p, k):
 	indepSet=greedyAlg(graph.copy())
 	indepSetBest=indepSet
 	condition=True
@@ -97,9 +97,10 @@ def search(graph, b, p):
 			indepSetBest=indepSet
 		count+=1
 		print(count)
-		if(count>10):
+		iters=100
+		if(count>iters):
 			condition=False
-	filename="results/c"+str(p)+"b"+str(b)+"k5Iter10.txt"
+	filename="results/c"+str(p)+"b"+str(b)+"k"+str(k)+"Iter"+str(iters)+".txt"
 	file=open(filename,'w')
 	file.write(str(indepSetBest))
 	return indepSetBest
@@ -132,8 +133,9 @@ def greedyAlg(graph):
 		#print(len(graph.nodes()))
 	return indepSet
 
-k=5
-graph=graphStrongProdPower(cycleGenerator(7),k)
+k=3
+p=9
+graph=graphStrongProdPower(cycleGenerator(p),k)
 #indepSet=greedyAlg(graph.copy())
 #print(indepSet)
 #print(len(indepSet))
@@ -153,6 +155,6 @@ reducedGraph.remove_node((1,2))
 print(reducedGraph.nodes())
 
 print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
-indep=search(graph,2, 7)
+indep=search(graph,3, p, k)
 print(indep)
 print(len(indep))
