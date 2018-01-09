@@ -134,7 +134,7 @@ def greedyAlg(graph):
 	return indepSet
 
 k=3
-p=9
+p=17
 graph=graphStrongProdPower(cycleGenerator(p),k)
 #indepSet=greedyAlg(graph.copy())
 #print(indepSet)
@@ -155,6 +155,6 @@ reducedGraph.remove_node((1,2))
 print(reducedGraph.nodes())
 
 print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
-indep=search(graph,3, p, k)
+indep=search(graph,5, p, k)
 print(indep)
 print(len(indep))
