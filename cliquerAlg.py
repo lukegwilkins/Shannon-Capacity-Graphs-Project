@@ -32,6 +32,7 @@ def cliquer(graph):
 	#print(vertices)
 	subsetOfVertices=[]
 	c=[]
+	cliques=[]
 	for i in range(len(orderedVertices)):
 		subsetOfVertices.append(orderedVertices[i])
 		#print(subsetOfVertices)
@@ -44,24 +45,30 @@ def cliquer(graph):
 		for j in neighbors:
 			if j in subsetOfVertices:
 				usableVertices.append(j)
-		#print(usableVertices)
+		print(usableVertices)
 		
 		if usableVertices==[]:
 			c.append(1)
+			cliques.append([vertex])
 		elif len(usableVertices)+1<=c[-1]:
 			c.append(c[-1])
+			cliques.append(cliques[-1])
 			print("preprune")
 		else:
 			candidateClique=[vertex]
-			c.append(cliquerBranching(c,graph,usableVertices, candidateClique, orderedVertices))
+			clique=cliquerBranching(c,cliques,graph,usableVertices, candidateClique, orderedVertices)
+			c.append(clique[0])
+			cliques.append(clique[1])
 			print(c)
+			print(clique[1])
 		print()
 		
-	return c[-1]
+	return cliques[-1]
 
-def cliquerBranching(c,graph,usableVertices,candidateClique, orderedVertices):
+def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVertices):
 	if usableVertices==[]:
-		return len(candidateClique)
+		#print(candidateClique)
+		return (len(candidateClique),candidateClique)
 	else:
 		for i in usableVertices:
 			index=orderedVertices.index(i)
@@ -74,17 +81,17 @@ def cliquerBranching(c,graph,usableVertices,candidateClique, orderedVertices):
 						reducedVertices.append(j)
 				#remember we are adding i to our clique hence the +1
 				if((len(candidateClique)+len(reducedVertices)+1)>c[-1]):
-					cliqueSize=cliquerBranching(c,graph,reducedVertices,candidateClique+[i], orderedVertices)
-					if cliqueSize==c[-1]+1:
+					cliqueSize=cliquerBranching(c,cliques,graph,reducedVertices,candidateClique+[i], orderedVertices)
+					if cliqueSize[0]==c[-1]+1:
 						#print("max clique increased")
-						return c[-1]+1
+						return (c[-1]+1,cliqueSize[1])
 				#else:
 					#print("neighbors prune")
 			#else:
 				#print("prune")
-		return c[-1]
+		return (c[-1],cliques[-1])
 
-cycle=cycleGenerator(7)
+cycle=cycleGenerator(5)
 powerGraph=graphStrongProdPower(cycle,2)
-#print(cliquer(nx.complement(powerGraph)))
-print(cliquer(powerGraph))
+print(cliquer(nx.complement(powerGraph)))
+#print(cliquer(powerGraph))
