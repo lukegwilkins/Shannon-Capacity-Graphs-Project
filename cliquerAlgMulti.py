@@ -104,11 +104,9 @@ def cliquerBranchingMulti(c,cliques,graph,usableVertices,candidateClique, ordere
 		#print(usableVertices)
 		for i in usableVertices:
 			#print(i)
-			if(i==(1,3)):
-				print("wqehiuik")
 			params=(c, cliques, graph, usableVertices, candidateClique, orderedVertices, i, globalCliqueIncrease)
-		args.append(params)
-		p = Pool(4)
+			args.append(params)
+		p = Pool(6)
 		results=p.map(cliquerBranchingSingle, args)
 		#print(globalCliqueIncrease)
 		#if not globalCliqueIncrease:
@@ -130,12 +128,6 @@ def cliquerBranchingSingle(args):
 	globalCliqueIncrease=args[7]
 	#globalCliqueIncrease=0
 	#args[7]
-	if(vertex==(1,3)):
-		print("boop")
-	if((3,4) in candidateClique):
-		print("here2")
-		if(vertex==(1,3)):
-			print("wu")
 	index=orderedVertices.index(vertex)
 	#print(candidateClique)
 	#print(vertex)
@@ -160,8 +152,6 @@ def cliquerBranchingSingle(args):
 	return (c[-1],cliques[-1])
 	
 def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVertices, globalCliqueIncrease):
-	if(((3,4) in candidateClique) and ((1,3) in candidateClique)):
-		print("bluh")
 	if globalCliqueIncrease[0]==0:
 		#print("i decided to run "+ str(globalCliqueIncrease[0]))
 		if usableVertices==[]:
@@ -197,7 +187,7 @@ def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVert
 		return (c[-1],cliques[-1])
 
 if __name__=='__main__':
-	cycle=cycleGenerator(5)
+	cycle=cycleGenerator(7)
 	powerGraph=graphStrongProdPower(cycle,2)
 	print(cliquer(nx.complement(powerGraph)))
 	#print(cliquer(cycle))
