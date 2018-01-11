@@ -99,7 +99,7 @@ def cliquerBranchingMulti(c,cliques,graph,usableVertices,candidateClique, ordere
 				
 		args=[]
 		manager=Manager()
-		globalCliqueIncrease=manager.list(range(1))
+		globalCliqueIncrease=[0]
 		#print(usableVertices+candidateClique)
 		#print(usableVertices)
 		for i in usableVertices:
@@ -158,27 +158,33 @@ def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVert
 			#print(candidateClique)
 			return (len(candidateClique),candidateClique)
 		else:
-			for i in usableVertices:
-				index=orderedVertices.index(i)
+			i=0
+			while i<len(usableVertices):
+				vertex=usableVertices[i]
+				index=orderedVertices.index(vertex)
 				if((len(candidateClique)+c[index])>c[-1]):
 					reducedVertices=[]
 					#remove i and things that are not its neighbors from the usable vertices
-					neighbors=graph.neighbors(i)
+					neighbors=graph.neighbors(vertex)
 					for j in neighbors:
 						if j in usableVertices:
 							reducedVertices.append(j)
 					#remember we are adding i to our clique hence the +1
 					if((len(candidateClique)+len(reducedVertices)+1)>c[-1]):
-						cliqueSize=cliquerBranching(c,cliques,graph,reducedVertices,candidateClique+[i], orderedVertices, globalCliqueIncrease)
+						cliqueSize=cliquerBranching(c,cliques,graph,reducedVertices,candidateClique+[vertex], orderedVertices, globalCliqueIncrease)
 						if cliqueSize[0]==c[-1]+1:
 							#print("max clique increased")
 							globalCliqueIncrease[0]=1
 							#print("The other processes can stop running")
 							#print(cliqueSize)
 							return cliqueSize
-					#else:
+						else:
+							del usableVertices[i]
+					else:
+						del usableVertices[i]
 						#print("neighbors prune")
-				#else:
+				else:
+					i+=1
 					#print("prune")
 			#print((c[-1],cliques[-1]))
 			return (c[-1],cliques[-1])

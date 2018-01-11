@@ -45,7 +45,7 @@ def cliquer(graph):
 		for j in neighbors:
 			if j in subsetOfVertices:
 				usableVertices.append(j)
-		#print(usableVertices)
+		print(usableVertices)
 		
 		if usableVertices==[]:
 			c.append(1)
@@ -109,7 +109,7 @@ def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVert
 				#print("prune")
 		return (c[-1],cliques[-1])
 
-cycle=cycleGenerator(9)
+cycle=cycleGenerator(7)
 powerGraph=graphStrongProdPower(cycle,2)
 print(cliquer(nx.complement(powerGraph)))
 #print(cliquer(powerGraph))
