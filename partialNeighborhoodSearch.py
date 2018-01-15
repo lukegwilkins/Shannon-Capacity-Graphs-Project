@@ -1,6 +1,7 @@
 import random
 import networkx as nx
-from networkx.algorithms import approximation
+#from networkx.algorithms import approximation
+from cliquerAlg import cliquer
 from datetime import datetime
 random.seed(datetime.now())
 
@@ -88,7 +89,9 @@ def search(graph, b, p, k):
 		indepSetLoop=distanceVertices(indepSet, i, b, p)
 		subGraph=graphWithNeighborsRemoved(graph,indepSetLoop)
 		subGraph.remove_node(i)
-		maxInd=approximation.maximum_independent_set(subGraph)
+		#print("hello")
+		print(len(subGraph.nodes()))
+		maxInd=cliquer(nx.complement(subGraph))
 		#print(maxInd)
 		#print(indepSetLoop)
 		indepSet= unionList(indepSetLoop,maxInd)
@@ -97,6 +100,7 @@ def search(graph, b, p, k):
 			indepSetBest=indepSet
 		count+=1
 		print(count)
+		print()
 		iters=100
 		if(count>iters):
 			condition=False
@@ -134,7 +138,7 @@ def greedyAlg(graph):
 	return indepSet
 
 k=3
-p=17
+p=9
 graph=graphStrongProdPower(cycleGenerator(p),k)
 #indepSet=greedyAlg(graph.copy())
 #print(indepSet)
@@ -155,6 +159,6 @@ reducedGraph.remove_node((1,2))
 print(reducedGraph.nodes())
 
 print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
-indep=search(graph,5, p, k)
+indep=search(graph,2, p, k)
 print(indep)
 print(len(indep))

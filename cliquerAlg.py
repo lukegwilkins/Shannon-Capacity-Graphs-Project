@@ -1,4 +1,5 @@
 import networkx as nx
+from vertexOrdering import graphColouringOrder
 #cliquer algorithm is based on the algorithm used in cliquer obtained from https://users.aalto.fi/~pat/cliquer.html
 #which is licened under GNU General Public License. Created by Sampo Niskanen and Patric R. J. Ostergard
 def cycleGenerator(n):
@@ -25,10 +26,10 @@ def graphStrongProdPower(graph,k):
 	return resultingGraph
 
 def cliquer(graph):
-	vertices=list(graph.nodes(data=False))
+	#vertices=list(graph.nodes(data=False))
 	
 	#order vertices todo
-	orderedVertices=vertices
+	orderedVertices=graphColouringOrder(graph)
 	#print(vertices)
 	subsetOfVertices=[]
 	c=[]
@@ -53,15 +54,15 @@ def cliquer(graph):
 		elif len(usableVertices)+1<=c[-1]:
 			c.append(c[-1])
 			cliques.append(cliques[-1])
-			print("preprune")
+			#print("preprune")
 		else:
 			candidateClique=[vertex]
 			clique=cliquerBranching(c,cliques,graph,usableVertices, candidateClique, orderedVertices)
 			c.append(clique[0])
 			cliques.append(clique[1])
 			print(c)
-			print(clique[1])
-		print()
+			#print(clique[1])
+		#print()
 		
 	return cliques[-1]
 
@@ -111,5 +112,6 @@ def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVert
 
 cycle=cycleGenerator(9)
 powerGraph=graphStrongProdPower(cycle,2)
+#print(cliquer(cycle))
 print(cliquer(nx.complement(powerGraph)))
 #print(cliquer(powerGraph))
