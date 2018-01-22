@@ -110,8 +110,8 @@ def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVert
 				#print("prune")
 		return (c[-1],cliques[-1])
 
-cycle=cycleGenerator(9)
-powerGraph=graphStrongProdPower(cycle,2)
+#cycle=cycleGenerator(7)
+#powerGraph=graphStrongProdPower(cycle,3)
 #print(cliquer(cycle))
-print(cliquer(nx.complement(powerGraph)))
+#print(cliquer(nx.complement(powerGraph)))
 #print(cliquer(powerGraph))

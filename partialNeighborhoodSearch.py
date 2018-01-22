@@ -101,7 +101,7 @@ def search(graph, b, p, k):
 		count+=1
 		print(count)
 		print()
-		iters=100
+		iters=1
 		if(count>iters):
 			condition=False
 	filename="results/c"+str(p)+"b"+str(b)+"k"+str(k)+"Iter"+str(iters)+".txt"
@@ -159,6 +159,6 @@ reducedGraph.remove_node((1,2))
 print(reducedGraph.nodes())
 
 print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
-indep=search(graph,2, p, k)
+indep=search(graph,3, p, k)
 print(indep)
 print(len(indep))
