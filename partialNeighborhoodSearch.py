@@ -39,16 +39,22 @@ def nodeConversion(node):
 		return node
 
 def leeDistance(vOne,vTwo,p):
-	distance=0
-	vOneConv=nodeConversion(vOne)
-	vTwoConv=nodeConversion(vTwo)
-	
-	for i in range(len(vOne)):
-		difference = abs(vOneConv[i]-vTwoConv[i])
+	distance=0	
+	if(type(vOne) is int):
+		difference = abs(vOne-vTwo)
 		if(difference<(p-difference)):
 			distance+=difference
 		else:
 			distance +=p-difference
+	else:
+		vOneConv=nodeConversion(vOne)
+		vTwoConv=nodeConversion(vTwo)
+		for i in range(len(vOne)):
+			difference = abs(vOneConv[i]-vTwoConv[i])
+			if(difference<(p-difference)):
+				distance+=difference
+			else:
+				distance +=p-difference
 	return distance
 
 def distanceVertices(indepSet, vertex, b, p):
@@ -83,14 +89,15 @@ def search(graph, b, p, k):
 	indepSetBest=indepSet
 	condition=True
 	count=0
-	print("boop")
+	#print("boop")
 	while condition:
 		i = indepSet[random.randint(0,len(indepSet)-1)]
 		indepSetLoop=distanceVertices(indepSet, i, b, p)
 		subGraph=graphWithNeighborsRemoved(graph,indepSetLoop)
 		subGraph.remove_node(i)
+		#print(subGraph.nodes())
 		#print("hello")
-		print(len(subGraph.nodes()))
+		#print(len(subGraph.nodes()))
 		maxInd=cliquer(nx.complement(subGraph))
 		#print(maxInd)
 		#print(indepSetLoop)
@@ -99,14 +106,14 @@ def search(graph, b, p, k):
 		if(len(indepSet)>len(indepSetBest)):
 			indepSetBest=indepSet
 		count+=1
-		print(count)
-		print()
-		iters=1
+		#print(count)
+		#print()
+		iters=10
 		if(count>iters):
 			condition=False
-	filename="results/c"+str(p)+"b"+str(b)+"k"+str(k)+"Iter"+str(iters)+".txt"
-	file=open(filename,'w')
-	file.write(str(indepSetBest))
+	#filename="results/c"+str(p)+"b"+str(b)+"k"+str(k)+"Iter"+str(iters)+".txt"
+	#file=open(filename,'w')
+	#file.write(str(indepSetBest))
 	return indepSetBest
 
 def minimumDegreeNode(graph):
@@ -137,7 +144,7 @@ def greedyAlg(graph):
 		#print(len(graph.nodes()))
 	return indepSet
 
-k=3
+""""k=3
 p=9
 graph=graphStrongProdPower(cycleGenerator(p),k)
 #indepSet=greedyAlg(graph.copy())
@@ -148,7 +155,7 @@ graph=graphStrongProdPower(cycleGenerator(p),k)
 #print(graph.nodes())
 tuple=(5,((1,2),(3,4)))
 print(nodeConversion(tuple))
-""""
+
 print(leeDistance(((1,2),1), ((2,4),6),7))
 vertices=distanceVertices(indepSet, (1,2),3,7)
 vertices
@@ -158,7 +165,7 @@ reducedGraph=graphWithNeighborsRemoved(graph, vertices)
 reducedGraph.remove_node((1,2))
 print(reducedGraph.nodes())
 
-print(unionList([2,3,6,1],[3,2,4,7,10,9]))"""
+print(unionList([2,3,6,1],[3,2,4,7,10,9]))
 indep=search(graph,3, p, k)
 print(indep)
-print(len(indep))
+print(len(indep))"""

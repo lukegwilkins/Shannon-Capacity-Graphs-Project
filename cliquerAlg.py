@@ -60,7 +60,7 @@ def cliquer(graph):
 			clique=cliquerBranching(c,cliques,graph,usableVertices, candidateClique, orderedVertices)
 			c.append(clique[0])
 			cliques.append(clique[1])
-			print(c)
+			#print(c)
 			#print(clique[1])
 		#print()
 		

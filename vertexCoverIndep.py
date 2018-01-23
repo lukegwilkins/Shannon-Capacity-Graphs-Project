@@ -43,4 +43,4 @@ def vertexCoverApprox(graph):
 	return vertexCover
 
 
-print(vertexCoverApprox(starCycleGen(4,5)))
+#print(vertexCoverApprox(starCycleGen(4,5)))

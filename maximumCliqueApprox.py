@@ -83,7 +83,7 @@ def cliqueApprox(graph, k, t):
 		return [vertices[0]]
 	clique=[]
 	subVertices = list(graph.nodes())
-	print(subVertices)
+	#print(subVertices)
 	while len(subVertices)>0:
 		temp=phase(subVertices, graph, clique, k, t)
 		#print(temp)
@@ -121,7 +121,7 @@ def cliqueMaxApprox(graph,b):
 	k = log(n)**b
 	
 	return cliqueApprox(graph, k ,t)
-graph = nx.complete_graph(25)
+""""graph = nx.complete_graph(25)
 random.seed(datetime.now())
 for i in range(25):
 	for j in range(i+1, 25):
@@ -130,4 +130,4 @@ for i in range(25):
 
 #print(graph.edges())
 #graph=nx.strong_product(graph,graph)
-print(cliqueMaxApprox(graph,0.01))
+print(cliqueMaxApprox(graph,0.01))"""
