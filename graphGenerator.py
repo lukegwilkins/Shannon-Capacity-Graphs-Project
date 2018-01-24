@@ -35,7 +35,7 @@ def starCycleGen(n,m):
 		graph.add_edge((i-1)%n,i)
 		vertex+=1
 	
-	print(graph.edges())
+	#print(graph.edges())
 	for i in range(m):
 		for j in range(n):
 			graph.add_edge(vertex,i)
@@ -43,4 +43,4 @@ def starCycleGen(n,m):
 			vertex+=1
 	return graph
 	
-#print(starCycleGen(4,3).edges())
+#print(starCycleGen(4,1).edges())

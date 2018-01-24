@@ -29,27 +29,38 @@ def loadGraphFromFile(filename):
 	return matrix
 	
 	
-def getGraphBounds(graph, p , k):
+def getGraphBounds(graph, p , k, filename):
 	#graphProdMatrix = graphProduct.graphProductPower(graph,power)
 	#indepSetLPResult = indepSetLP.indepSetLP(graphProdMatrix)
+	filename="results\\"+filename+".csv"
+	file=open(filename,'w')
+	
 	greedyAlgResult=greedyAlg(graph.copy())
 	print("Greedy Alg result:")
 	print(greedyAlgResult)
 	print(len(greedyAlgResult))
 	print()
+	file.write(str(len(greedyAlgResult))+"\n")
 	
 	#print(graphProdMatrix)
 	vertexCoverIndepResult = vertexCoverApprox(graph.copy())
+	for i in range(50):
+		temp = vertexCoverApprox(graph.copy())
+		if(len(temp)<len(vertexCoverIndepResult)):
+			vertexCoverIndepResult=temp
 	print("vertex cover result:")
 	print(vertexCoverIndepResult)
 	print(len(graph.nodes())-len(vertexCoverIndepResult))
 	print()
+	file.write(str(len(graph.nodes())-len(vertexCoverIndepResult))+"\n")
 	
 	cliqueApproxResult=cliqueMaxApprox(nx.complement(graph),0.01)
 	print("Clique approximation result:")
 	print(cliqueApproxResult)
 	print(len(cliqueApproxResult))
 	print()
+	file.write(str(len(cliqueApproxResult))+"\n")
+	
 	#vertices=[]
 	#for i in range(len(graphProdMatrix)):
 	#	vertices.append(i)
@@ -61,18 +72,26 @@ def getGraphBounds(graph, p , k):
 	#qualityCliqueResult = cliqueGenerator.qualityCliquesLP(vertices, graphProdMatrix, 0.01)
 	#print("Quality result:")
 	#print(qualityCliqueResult)
-	networkxIndep=approximation.maximum_independent_set(graph)
-	print("networkx result:")
-	print(networkxIndep)
-	print(len(networkxIndep))
-	print()
+	if(len(graph.nodes())<2100):
+		networkxIndep=approximation.maximum_independent_set(graph)
+		print("networkx result:")
+		print(networkxIndep)
+		print(len(networkxIndep))
+		print()
+		file.write(str(len(networkxIndep))+"\n")
+	else:
+		print("Too big for networkx")
 	
-	b=3
-	stocashticResult= search(graph, b ,p, k)
-	print("Stocashtic result:")
-	print(stocashticResult)
-	print(len(stocashticResult))
-	print()
+	if(len(graph.nodes())<400):
+		b=3
+		stochasticResult= search(graph, b ,p, k)
+		print("Stochastic result:")
+		print(stochasticResult)
+		print(len(stochasticResult))
+		print()
+		file.write(str(len(stochasticResult)))
+	else:
+		print("Graph too big for stochastic")
 	
 def rangeTesting(start, finish, graph):
 	for i in range(start, finish+1):
@@ -81,16 +100,19 @@ def rangeTesting(start, finish, graph):
 		print("Test for power: "+str(i)+" finished.\n")
 
 def main():
-	#fileName = sys.argv[1]
+	filename = sys.argv[1]
+	k = int(sys.argv[2])
 	#start = int(sys.argv[2])
 	#finish = int(sys.argv[3])
-	
+	filename = filename+"to"+sys.argv[2]
 	#graph=loadGraphFromFile(fileName)
 	
 	#rangeTesting(start, finish, graph)
-	graph=graphGenerator.cycleGenerator(7)
-	graph=nx.strong_product(graph,graph)
-	getGraphBounds(graph, 7, 2)
+	n=7
+	graph=graphGenerator.starCycleGen(6,1)
+	if(k>1):
+		graph=graphGenerator.graphStrongProdPower(graph,k)
+	getGraphBounds(graph, n, k, filename)
 	
 	
 main()

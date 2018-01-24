@@ -108,7 +108,7 @@ def search(graph, b, p, k):
 		count+=1
 		#print(count)
 		#print()
-		iters=10
+		iters=100
 		if(count>iters):
 			condition=False
 	#filename="results/c"+str(p)+"b"+str(b)+"k"+str(k)+"Iter"+str(iters)+".txt"
