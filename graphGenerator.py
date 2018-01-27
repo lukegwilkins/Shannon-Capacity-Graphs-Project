@@ -26,7 +26,18 @@ def cycleGenerator(n):
 		graph.add_edge((i-1)%n,i)
 	return graph
 	
-#def probabilisticGraph 
+def probabilisticGraph(n,p):
+	graph=nx.complete_graph(n)
+	random.seed(datetime.now())
+	edges=list(graph.edges())
+	
+	i=0
+	while i<len(edges):
+		if(random.random()>p):
+			graph.remove_edge(edges[i][0],edges[i][1])
+		i+=1
+	return graph
+		
 def starCycleGen(n,m):
 	graph=nx.Graph()
 	vertex=0
@@ -44,3 +55,4 @@ def starCycleGen(n,m):
 	return graph
 	
 #print(starCycleGen(4,1).edges())
+#print(probabilisticGraph(7,0.15).edges())

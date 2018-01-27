@@ -97,7 +97,7 @@ def search(graph, b, p, k):
 		subGraph.remove_node(i)
 		#print(subGraph.nodes())
 		#print("hello")
-		#print(len(subGraph.nodes()))
+		print(len(subGraph.nodes()))
 		maxInd=cliquer(nx.complement(subGraph))
 		#print(maxInd)
 		#print(indepSetLoop)
@@ -106,7 +106,7 @@ def search(graph, b, p, k):
 		if(len(indepSet)>len(indepSetBest)):
 			indepSetBest=indepSet
 		count+=1
-		#print(count)
+		print(count)
 		#print()
 		iters=100
 		if(count>iters):

@@ -83,7 +83,7 @@ def getGraphBounds(graph, p , k, filename):
 		print("Too big for networkx")
 	
 	if(len(graph.nodes())<400):
-		b=3
+		b=2
 		stochasticResult= search(graph, b ,p, k)
 		print("Stochastic result:")
 		print(stochasticResult)
@@ -101,15 +101,19 @@ def rangeTesting(start, finish, graph):
 
 def main():
 	filename = sys.argv[1]
-	k = int(sys.argv[2])
+	n = int(sys.argv[2])
+	p = float(sys.argv[3])
+	k = int(sys.argv[4])
 	#start = int(sys.argv[2])
 	#finish = int(sys.argv[3])
-	filename = filename+"to"+sys.argv[2]
+	filename = filename+"_size_"+sys.argv[2]+"_prob_"+sys.argv[3]+"_to_"+sys.argv[4]
 	#graph=loadGraphFromFile(fileName)
 	
 	#rangeTesting(start, finish, graph)
-	n=7
-	graph=graphGenerator.starCycleGen(6,1)
+	#n=7
+	#graph=graphGenerator.starCycleGen(6,1)
+	graph=graphGenerator.probabilisticGraph(n,p)
+	print(graph.edges())
 	if(k>1):
 		graph=graphGenerator.graphStrongProdPower(graph,k)
 	getGraphBounds(graph, n, k, filename)
