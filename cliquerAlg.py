@@ -63,8 +63,10 @@ def cliquer(graph):
 			#print(c)
 			#print(clique[1])
 		#print()
-		
-	return cliques[-1]
+	if(len(cliques)>0):	
+		return cliques[-1]
+	else:
+		return []
 
 def cliquerBranching(c,cliques,graph,usableVertices,candidateClique, orderedVertices):
 	if usableVertices==[]:

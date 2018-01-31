@@ -72,7 +72,7 @@ def getGraphBounds(graph, p , k, filename):
 	#qualityCliqueResult = cliqueGenerator.qualityCliquesLP(vertices, graphProdMatrix, 0.01)
 	#print("Quality result:")
 	#print(qualityCliqueResult)
-	if(len(graph.nodes())<2100):
+	if(len(graph.nodes())<2200):
 		networkxIndep=approximation.maximum_independent_set(graph)
 		print("networkx result:")
 		print(networkxIndep)
@@ -100,23 +100,27 @@ def rangeTesting(start, finish, graph):
 		print("Test for power: "+str(i)+" finished.\n")
 
 def main():
-	filename = sys.argv[1]
+	#filename = sys.argv[1]
 	n = int(sys.argv[2])
-	p = float(sys.argv[3])
+	d = int(sys.argv[3])
 	k = int(sys.argv[4])
 	#start = int(sys.argv[2])
 	#finish = int(sys.argv[3])
-	filename = filename+"_size_"+sys.argv[2]+"_prob_"+sys.argv[3]+"_to_"+sys.argv[4]
-	#graph=loadGraphFromFile(fileName)
-	
-	#rangeTesting(start, finish, graph)
-	#n=7
-	#graph=graphGenerator.starCycleGen(6,1)
-	graph=graphGenerator.probabilisticGraph(n,p)
+	graph=graphGenerator.regularGraph(n,d)
 	print(graph.edges())
-	if(k>1):
-		graph=graphGenerator.graphStrongProdPower(graph,k)
-	getGraphBounds(graph, n, k, filename)
+	for i in range(1,k+1):
+		filename = sys.argv[1]+"_size_"+sys.argv[2]+"_degree_"+sys.argv[3]+"_to_"+str(i)
+		#graph=loadGraphFromFile(fileName)
+		
+		#rangeTesting(start, finish, graph)
+		#n=7
+		#graph=graphGenerator.starCycleGen(6,1)
+		
+		if(i>1):
+			graphPrime=graphGenerator.graphStrongProdPower(graph,i)
+			getGraphBounds(graphPrime, n, k, filename)
+		else:
+			getGraphBounds(graph, n, k, filename)
 	
 	
 main()

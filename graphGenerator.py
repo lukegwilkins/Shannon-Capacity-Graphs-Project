@@ -37,7 +37,23 @@ def probabilisticGraph(n,p):
 			graph.remove_edge(edges[i][0],edges[i][1])
 		i+=1
 	return graph
+
+def neighborsToRemove(graph, vertex, k):
+	removableNeighbors=[]
+	for i in graph.neighbors(vertex):
+		if graph.degree(i)>k:
+			removableNeighbors.append(i)
+	return removableNeighbors
+
+def regularGraph(n,k):
+	if(n*k %2==0):
+		return nx.random_regular_graph(k,n)
+	elif(k>0 and k<n):
+		return nx.random_regular_graph(k+1,n)
+	else:
+		return nx.random_regular_graph(k-1,n)
 		
+			
 def starCycleGen(n,m):
 	graph=nx.Graph()
 	vertex=0
@@ -56,3 +72,4 @@ def starCycleGen(n,m):
 	
 #print(starCycleGen(4,1).edges())
 #print(probabilisticGraph(7,0.15).edges())
+print(regularGraph(7,4).edges())

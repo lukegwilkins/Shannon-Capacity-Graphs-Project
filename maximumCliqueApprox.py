@@ -80,7 +80,7 @@ def newSubVertices(vertices, clique):
 	
 def cliqueApprox(graph, k, t):
 	if(len(graph.nodes())<2*k*t):
-		return [vertices[0]]
+		return [graph.nodes[0]]
 	clique=[]
 	subVertices = list(graph.nodes())
 	#print(subVertices)
