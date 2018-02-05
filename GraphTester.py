@@ -49,7 +49,7 @@ def getGraphBounds(graph, p , k, filename):
 		if(len(temp)<len(vertexCoverIndepResult)):
 			vertexCoverIndepResult=temp
 	print("vertex cover result:")
-	print(vertexCoverIndepResult)
+	#print(vertexCoverIndepResult)
 	print(len(graph.nodes())-len(vertexCoverIndepResult))
 	print()
 	file.write(str(len(graph.nodes())-len(vertexCoverIndepResult))+"\n")
@@ -102,14 +102,15 @@ def rangeTesting(start, finish, graph):
 def main():
 	#filename = sys.argv[1]
 	n = int(sys.argv[2])
-	d = int(sys.argv[3])
-	k = int(sys.argv[4])
+	#d = int(sys.argv[3])
+	k = int(sys.argv[3])
 	#start = int(sys.argv[2])
 	#finish = int(sys.argv[3])
-	graph=graphGenerator.regularGraph(n,d)
+	#graph=graphGenerator.regularGraph(n,d)
+	graph=graphGenerator.cograph(n)
 	print(graph.edges())
 	for i in range(1,k+1):
-		filename = sys.argv[1]+"_size_"+sys.argv[2]+"_degree_"+sys.argv[3]+"_to_"+str(i)
+		filename = sys.argv[1]+"_size_"+sys.argv[2]+"_to_"+str(i)
 		#graph=loadGraphFromFile(fileName)
 		
 		#rangeTesting(start, finish, graph)

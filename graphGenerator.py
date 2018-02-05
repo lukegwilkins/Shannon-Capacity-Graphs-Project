@@ -69,7 +69,73 @@ def starCycleGen(n,m):
 			graph.add_edge(i,vertex)
 			vertex+=1
 	return graph
+
+def cograph(n):
+	random.seed(datetime.now())
+	cographs=[]
+	complementGraphs=[]
+	for i in range(n):
+		graph=nx.Graph()
+		graph.add_node(i)
+		cographs.append(graph)
+		#complementableGraphs.append(-1)
+		#print(graph.nodes())
+	#print(cographs)
+	#print(complementableGraphs)
 	
+	indexOne=random.randint(0,len(cographs)-1)
+	indexTwo=random.randint(0,len(cographs)-1)
+	while(indexTwo==indexOne):
+		indexTwo=random.randint(0,len(cographs)-1)
+	
+	unionGraph=nx.disjoint_union(cographs[indexOne], cographs[indexTwo])
+	#print(indexOne, indexTwo)
+	if(indexOne<indexTwo):
+		cographs[indexOne]=unionGraph
+		del cographs[indexTwo]
+	else:
+		cographs[indexTwo]=unionGraph
+		del cographs[indexOne]
+		
+	while(len(cographs)>1):
+		operationChoice=random.randint(0,4)
+		
+		if(operationChoice<4):
+			if(len(complementGraphs)<len(cographs)):
+				index=random.randint(0,len(cographs)-1)
+				while(index in complementGraphs):
+					index=random.randint(0,len(cographs)-1)
+				
+				complement= nx.complement(cographs[index])
+				
+				cographs[index]= complement
+				complementGraphs.append(index)
+				
+		else:
+			indexOne=random.randint(0,len(cographs)-1)
+			indexTwo=random.randint(0,len(cographs)-1)
+			while(indexTwo==indexOne):
+				indexTwo=random.randint(0,len(cographs)-1)
+	
+			unionGraph=nx.disjoint_union(cographs[indexOne], cographs[indexTwo])
+			
+			if(indexOne<indexTwo):
+				cographs[indexOne]=unionGraph
+				del cographs[indexTwo]
+			else:
+				cographs[indexTwo]=unionGraph
+				del cographs[indexOne]
+			
+			complementGraphs=[]
+	print(cographs)		
+	for i in cographs:
+		print(i.nodes())
+	
+	complementChoice=random.randint(0,4)
+	if(complementChoice<4):
+		return nx.complement(cographs[0])
+	return cographs[0]
 #print(starCycleGen(4,1).edges())
 #print(probabilisticGraph(7,0.15).edges())
-print(regularGraph(7,4).edges())
+#print(regularGraph(7,4).edges())
+#print(cograph(7).edges())

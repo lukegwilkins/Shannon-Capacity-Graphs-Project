@@ -33,7 +33,7 @@ def vertexCoverApprox(graph):
 		edges=list(graph.edges())
 		randomEdge=random.randint(0,len(edges)-1)
 		edge=edges[randomEdge]
-		
+		print(edge)
 		vertexCover.append(edge[0])
 		vertexCover.append(edge[1])
 		
