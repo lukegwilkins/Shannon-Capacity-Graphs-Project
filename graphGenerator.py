@@ -135,7 +135,82 @@ def cograph(n):
 	if(complementChoice<4):
 		return nx.complement(cographs[0])
 	return cographs[0]
+
+def stronglyRegularC6Cross():
+	graph=nx.Graph()
+	n=6
+	for i in range(n):
+		graph.add_edge(i,(i+1)%n)
+		graph.add_edge((i-1)%n,i)
+		graph.add_edge(i,(i+3)%n)
+	return graph
+
+def stronglyRegularC6Star():
+	graph=nx.Graph()
+	n=6
+	for i in range(n):
+		graph.add_edge(i,(i+1)%n)
+		graph.add_edge((i-1)%n,i)
+		graph.add_edge(i,(i+2)%n)
+		graph.add_edge((i-2)%n,i)
+	return graph
+
+def stronglyRegularC8Star():
+	graph=nx.Graph()
+	n=8
+	for i in range(n):
+		graph.add_edge(i,(i+1)%n)
+		graph.add_edge((i-1)%n,i)
+		graph.add_edge(i,(i+3)%n)
+	return graph
+
+def stronglyRegularC8Dense():
+	graph=nx.Graph()
+	n=8
+	for i in range(n):
+		graph.add_edge(i,(i+1)%n)
+		graph.add_edge((i-1)%n,i)
+		graph.add_edge(i,(i+3)%n)
+		graph.add_edge(i,(i+2)%n)
+	return graph
+
+def stronglyRegularC9Bipartite():
+	graph=nx.Graph()
+	n=9
+	for i in range(n):
+		graph.add_edge(i,(i+1)%n)
+		graph.add_edge((i-1)%n,i)
+		
+	graph.add_edge(0,7)
+	graph.add_edge(0,5)
+	
+	graph.add_edge(1,3)
+	graph.add_edge(1,5)
+	
+	graph.add_edge(2,7)
+	graph.add_edge(2,6)
+	
+	graph.add_edge(3,8)
+	
+	graph.add_edge(4,8)
+	graph.add_edge(4,6)
+	return graph
+
+def paleyGraph():
+	n=13
+	graph=nx.Graph()
+	for i in range(n):
+		graph.add_edge(i,(i+1)%n)
+		graph.add_edge((i-1)%n,i)
+		graph.add_edge(i,(i+3)%n)
+		graph.add_edge(i,(i+4)%n)
+	return graph
+	
 #print(starCycleGen(4,1).edges())
 #print(probabilisticGraph(7,0.15).edges())
 #print(regularGraph(7,4).edges())
 #print(cograph(7).edges())
+#print(stronglyRegularC9Bipartite().edges())
+#print(nx.is_strongly_regular(stronglyRegularC9Bipartite()))
+#print(payleyGraph().edges())
+#print(nx.is_strongly_regular(payleyGraph()))

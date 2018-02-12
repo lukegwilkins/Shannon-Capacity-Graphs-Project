@@ -48,7 +48,7 @@ def cliquer(graph):
 				usableVertices.append(j)
 		#print(usableVertices)
 		
-		if usableVertices==[]:
+		if usableVertices==[] and len(c)==0:
 			c.append(1)
 			cliques.append([vertex])
 		elif len(usableVertices)+1<=c[-1]:

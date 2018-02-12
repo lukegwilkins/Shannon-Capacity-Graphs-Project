@@ -106,11 +106,12 @@ def main():
 	k = int(sys.argv[3])
 	#start = int(sys.argv[2])
 	#finish = int(sys.argv[3])
-	#graph=graphGenerator.regularGraph(n,d)
-	graph=graphGenerator.cograph(n)
-	print(graph.edges())
+	graph=graphGenerator.paleyGraph()
+	#graph=graphGenerator.cograph(n)
+	#print(graph.edges())
 	for i in range(1,k+1):
-		filename = sys.argv[1]+"_size_"+sys.argv[2]+"_to_"+str(i)
+		#"_size_"+sys.argv[2]+"_degree_"+sys.argv[3]+
+		filename = sys.argv[1]+"_to_"+str(i)
 		#graph=loadGraphFromFile(fileName)
 		
 		#rangeTesting(start, finish, graph)
