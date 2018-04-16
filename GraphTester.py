@@ -8,33 +8,14 @@ from networkx.algorithms import approximation
 
 import graphGenerator
 import sys
-
-def loadGraphFromFile(filename):
-	with open(filename) as f:
-		fileData = f.read()
-	f.close()
 	
-	fileLines=fileData.split("\n")
-	
-	matrix=[]
-	for i in fileLines:
-		matrix.append(i.split(","))
-		
-	for row in matrix:
-		for col in range(len(row)):
-			row[col]=int(row[col])
-	
-	""""for i in matrix:
-		print(i)"""
-	return matrix
-	
-	
+"""Function runs each of the approximation algorithms on the graph and outputs them to a file"""
 def getGraphBounds(graph, p , k, filename):
-	#graphProdMatrix = graphProduct.graphProductPower(graph,power)
-	#indepSetLPResult = indepSetLP.indepSetLP(graphProdMatrix)
+	#creates the file to store the results
 	filename="results\\"+filename+".csv"
 	file=open(filename,'w')
 	
+	#runs the greedy algorithm and outputs the results
 	greedyAlgResult=greedyAlg(graph.copy())
 	print("Greedy Alg result:")
 	print(greedyAlgResult)
@@ -42,18 +23,18 @@ def getGraphBounds(graph, p , k, filename):
 	print()
 	file.write(str(len(greedyAlgResult))+"\n")
 	
-	#print(graphProdMatrix)
+	#run the vertex cover approximation algorithm 50 times and outputs the best result
 	vertexCoverIndepResult = vertexCoverApprox(graph.copy())
 	for i in range(50):
 		temp = vertexCoverApprox(graph.copy())
 		if(len(temp)<len(vertexCoverIndepResult)):
 			vertexCoverIndepResult=temp
 	print("vertex cover result:")
-	#print(vertexCoverIndepResult)
 	print(len(graph.nodes())-len(vertexCoverIndepResult))
 	print()
 	file.write(str(len(graph.nodes())-len(vertexCoverIndepResult))+"\n")
 	
+	#runs the algorithm for approximating clique and outputs its results
 	cliqueApproxResult=cliqueMaxApprox(nx.complement(graph),0.01)
 	print("Clique approximation result:")
 	print(cliqueApproxResult)
@@ -61,17 +42,7 @@ def getGraphBounds(graph, p , k, filename):
 	print()
 	file.write(str(len(cliqueApproxResult))+"\n")
 	
-	#vertices=[]
-	#for i in range(len(graphProdMatrix)):
-	#	vertices.append(i)
-	
-	#quantityCliqueResult = cliqueGenerator.quantityCliquesLP(vertices, graphProdMatrix, 10)
-	#print("Quantity result:")
-	#print(quantityCliqueResult)
-	
-	#qualityCliqueResult = cliqueGenerator.qualityCliquesLP(vertices, graphProdMatrix, 0.01)
-	#print("Quality result:")
-	#print(qualityCliqueResult)
+	#if the graph isn't too large we run the algorithm for networkx and outputs its results
 	if(len(graph.nodes())<2200):
 		networkxIndep=approximation.maximum_independent_set(graph)
 		print("networkx result:")
@@ -82,6 +53,7 @@ def getGraphBounds(graph, p , k, filename):
 	else:
 		print("Too big for networkx")
 	
+	#if the graph isn't too large for the stochastic algorithm then we run it and output its results
 	if(len(graph.nodes())<400):
 		b=2
 		stochasticResult= search(graph, b ,p, k)
@@ -90,34 +62,23 @@ def getGraphBounds(graph, p , k, filename):
 		print(len(stochasticResult))
 		print()
 		file.write(str(len(stochasticResult)))
+		file.write("\n")
+		file.write(str(stochasticResult))
 	else:
 		print("Graph too big for stochastic")
-	
-def rangeTesting(start, finish, graph):
-	for i in range(start, finish+1):
-		print("Test for power: "+str(i))
-		getGraphBounds(graph, i)
-		print("Test for power: "+str(i)+" finished.\n")
 
+"""Main method"""
 def main():
-	#filename = sys.argv[1]
+	#we get the size of the graph and the power we are going to test up to
 	n = int(sys.argv[2])
-	#d = int(sys.argv[3])
 	k = int(sys.argv[3])
-	#start = int(sys.argv[2])
-	#finish = int(sys.argv[3])
-	graph=graphGenerator.paleyGraph()
-	#graph=graphGenerator.cograph(n)
-	#print(graph.edges())
+	#we create the base graph
+	graph=graphGenerator.regularGraph(n,8)
 	for i in range(1,k+1):
-		#"_size_"+sys.argv[2]+"_degree_"+sys.argv[3]+
+		#we get the file name for the graph
 		filename = sys.argv[1]+"_to_"+str(i)
-		#graph=loadGraphFromFile(fileName)
 		
-		#rangeTesting(start, finish, graph)
-		#n=7
-		#graph=graphGenerator.starCycleGen(6,1)
-		
+		#we create the graph's strong product power and get the independent set sizes for it
 		if(i>1):
 			graphPrime=graphGenerator.graphStrongProdPower(graph,i)
 			getGraphBounds(graphPrime, n, k, filename)
